@@ -1,38 +1,41 @@
+import streamlit as st
 import language_tool_python
 
-# Initialize grammar-checking tool
+st.set_page_config(
+    page_title="AI Grammar & Spelling Correction",
+    page_icon="✍️"
+)
+
+st.title("✍️ AI Grammar & Spelling Correction")
+st.write("Enter an English sentence and get the corrected version.")
+
+# Initialize LanguageTool
 tool = language_tool_python.LanguageTool("en-US")
 
+# User input
+sentence = st.text_area(
+    "Enter your sentence:",
+    placeholder="Example: He don't knows python."
+)
 
-def correct_sentence(sentence):
-    """
-    Correct grammar and spelling mistakes
-    in a single English sentence.
-    """
+# Correction button
+if st.button("Correct Sentence"):
+    if sentence.strip():
+        corrected_sentence = tool.correct(sentence)
 
-    corrected_sentence = tool.correct(sentence)
+        st.subheader("Result")
 
-    print("Original Sentence :", sentence)
-    print("Corrected Sentence:", corrected_sentence)
-    print("=" * 60)
+        col1, col2 = st.columns(2)
 
-    return corrected_sentence
+        with col1:
+            st.write("**Original Sentence**")
+            st.info(sentence)
 
+        with col2:
+            st.write("**Corrected Sentence**")
+            st.success(corrected_sentence)
 
-# Sample test sentences
-test_sentences = [
-    "He don't knows python.",
-    "She are going to school.",
-    "I has a new laptop.",
-    "They was playing cricket.",
-    "He go to office everyday."
-]
+    else:
+        st.warning("Please enter a sentence.")
 
-
-# Run correction
-for sentence in test_sentences:
-    correct_sentence(sentence)
-
-
-# Close LanguageTool
 tool.close()
