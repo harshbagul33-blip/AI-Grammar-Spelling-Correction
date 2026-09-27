@@ -1,4 +1,4 @@
 streamlit
-requests
-pandas
+language-tool-python
 textstat
+pandas
